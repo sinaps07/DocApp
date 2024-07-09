@@ -34,7 +34,7 @@ const NotificationPage = () => {
     } catch (error) {
       dispatch(hideLoading());
       console.log(error);
-      message.error("somthing went wrong");
+      message.error("something went wrong");
     }
   };
 
@@ -73,7 +73,7 @@ const NotificationPage = () => {
               Mark All Read
             </h4>
           </div>
-          {user?.notifcation.map((notificationMgs) => (
+          {user?.notification.map((notificationMgs) => (
             <div className="card" style={{ cursor: "pointer" }}>
               <div
                 className="card-text"

@@ -13,6 +13,7 @@ const ApplyDoctor = () => {
   const navigate = useNavigate();
   //handle form
   const handleFinish = async (values) => {
+    console.log(values)
     try {
       dispatch(showLoading());
       const res = await axios.post(
@@ -130,12 +131,12 @@ const ApplyDoctor = () => {
           </Col>
           <Col xs={24} md={24} lg={8}>
             <Form.Item
-              label="Fees Per Cunsaltation"
+              label="Fees Per Consultation"
               name="feesPerCunsaltation"
               required
               rules={[{ required: true }]}
             >
-              <Input type="text" placeholder="your contact no" />
+              <Input type="text" placeholder="your fees" />
             </Form.Item>
           </Col>
           <Col xs={24} md={24} lg={8}>

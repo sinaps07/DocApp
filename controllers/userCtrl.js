@@ -79,14 +79,14 @@ const authController = async (req, res) => {
   }
 };
 
-// APpply DOctor CTRL
+// Apply Doctor CTRL
 const applyDoctorController = async (req, res) => {
   try {
     const newDoctor = await doctorModel({ ...req.body, status: "pending" });
     await newDoctor.save();
     const adminUser = await userModel.findOne({ isAdmin: true });
-    const notifcation = adminUser.notifcation;
-    notifcation.push({
+    const notification = adminUser.notification;
+    notification.push({
       type: "apply-doctor-request",
       message: `${newDoctor.firstName} ${newDoctor.lastName} Has Applied For A Doctor Account`,
       data: {
@@ -95,7 +95,7 @@ const applyDoctorController = async (req, res) => {
         onClickPath: "/admin/docotrs",
       },
     });
-    await userModel.findByIdAndUpdate(adminUser._id, { notifcation });
+    await userModel.findByIdAndUpdate(adminUser._id, { notification });
     res.status(201).send({
       success: true,
       message: "Doctor Account Applied SUccessfully",
@@ -115,10 +115,10 @@ const getAllNotificationController = async (req, res) => {
   try {
     const user = await userModel.findOne({ _id: req.body.userId });
     const seennotification = user.seennotification;
-    const notifcation = user.notifcation;
-    seennotification.push(...notifcation);
-    user.notifcation = [];
-    user.seennotification = notifcation;
+    const notification = user.notification;
+    seennotification.push(...notification);
+    user.notification = [];
+    user.seennotification = notification;
     const updatedUser = await user.save();
     res.status(200).send({
       success: true,
@@ -139,7 +139,7 @@ const getAllNotificationController = async (req, res) => {
 const deleteAllNotificationController = async (req, res) => {
   try {
     const user = await userModel.findOne({ _id: req.body.userId });
-    user.notifcation = [];
+    user.notification = [];
     user.seennotification = [];
     const updatedUser = await user.save();
     updatedUser.password = undefined;
@@ -164,7 +164,7 @@ const getAllDocotrsController = async (req, res) => {
     const doctors = await doctorModel.find({ status: "approved" });
     res.status(200).send({
       success: true,
-      message: "Docots Lists Fetched Successfully",
+      message: "Doctors Lists Fetched Successfully",
       data: doctors,
     });
   } catch (error) {
@@ -172,7 +172,7 @@ const getAllDocotrsController = async (req, res) => {
     res.status(500).send({
       success: false,
       error,
-      message: "Errro WHile Fetching DOcotr",
+      message: "Error while fetching doctor's list",
     });
   }
 };
@@ -186,7 +186,7 @@ const bookeAppointmnetController = async (req, res) => {
     const newAppointment = new appointmentModel(req.body);
     await newAppointment.save();
     const user = await userModel.findOne({ _id: req.body.doctorInfo.userId });
-    user.notifcation.push({
+    user.notification.push({
       type: "New-appointment-request",
       message: `A nEw Appointment Request from ${req.body.userInfo.name}`,
       onCLickPath: "/user/appointments",
